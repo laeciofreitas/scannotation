@@ -13,7 +13,8 @@ public class FileProtocolIteratorFactory implements DirectoryIteratorFactory
 
    public StreamIterator create(URL url, Filter filter) throws IOException
    {
-      File f = new File(url.getPath());
+			File f = createFile(url);
+	
       if (f.isDirectory())
       {
          return new FileIterator(f, filter);
@@ -23,4 +24,15 @@ public class FileProtocolIteratorFactory implements DirectoryIteratorFactory
          return new JarIterator(url.openStream(), filter);
       }
    }
+   
+   private File createFile(URL url) {
+			File f = null;
+			if (url.getProtocol().equals("file")) {
+				f = new File(url.toString().substring(5));
+			} else {
+				f = new File(url.getPath());
+			}
+			return f;		
+	 }		
+
 }
